@@ -5,11 +5,11 @@ exports.add = (req, res) => {
 	Friend.add({uID: req.params.uID, friendID: req.params.friendID}, (err) => {
 		if(err) {
 			res.status(500).send({
-				message: err.message || "Some error occurred while adding new friend"
+				message: err.message || "Error : Friend.add"
 			});
 		}
 
-		else res.send("add a new friend");
+		else res.send("Success : Friend.add");
 	});
 }
 
@@ -18,10 +18,10 @@ exports.remove = (req, res) => {
 	Friend.remove({uID: req.params.uID, friendID: req.params.friendID}, (err) => {
 		if(err) {
 			res.status(500).send({
-				message: err.message || "Some error occured while removing friend"
+				message: err.message || "Error : Friend.remove"
 			});
 		}
-
-		else res.send("remove a friend");
+		
+		else res.send("Success : Friend.remove");
 	});
 }
