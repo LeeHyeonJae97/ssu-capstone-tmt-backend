@@ -5,34 +5,32 @@ exports.findById = (req, res) => {
 	User.findById(req.params.uID, (err, data) => {
 		if(err) {
 			res.status(500).send({
-				message: err.message || "Some error occurred while finding user."
+				message: err.message || "Error : User.findById"
 			});
 		}
 
-		else res.send(data);		
+		else res.send({message: "Success : User.findById", data: data});
 	});
 };
 
 // 유저 검색
-// 친구의 ID 포함 각종 정보 전달
 exports.findByName = (req, res) => {
 	Friend.findByName(req.params.friend_name, (err, data) => {
 		if(err) {
 			res.status(500).send({
-				message: err.message || "Some error occured while finding user by name"
+				message: err.message || "Error : User.findByName"
 			});
 		}
 
-		else res.send(data);
+		else res.send({message: "Success : User.findByName", data: data});
 	});
 }
 
 // 새로운 유저 추가
 exports.create = (req, res) => {
-	// body에 아무런 정보도 없는 경우
 	if(!req.body) {
 		res.status(400).send({
-			message: "Content can not be empty"
+			message: "Error : User.create / Content can not be empty"
 		});
 	}
 
@@ -46,14 +44,13 @@ exports.create = (req, res) => {
 		//weight: req.body.weight
 	});
 
-	// 생성한 정보를 토대로 데이터베이스에 저장
 	User.create(user, (err, data) => {
 		if(err) {
 			res.status(500).send({
-				message: err.message || "Some error occurred while creating new user."
+				message: err.message || "Error : User.create"
 			});
 		}
-		else res.send(data.uID);
+		else res.send({message: "Success : User.create", uID: data.uID});
 	});
 };
 
@@ -62,10 +59,10 @@ exports.update = (req, res) => {
 	User.update(req.params.uID, (err) => {
 		if(err) {
 			res.status(500).send({
-				message: err.message || "Some error occured while updating the user."
+				message: err.message || "Error: User.update"
 			});
 		}
-		else res.send("update a user");
+		else res.send("Success : User.update");
 	});
 };
 
@@ -74,9 +71,9 @@ exports.remove = (req, res) => {
 	User.remove(req.params.uID, (err) => {
 		if(err) {
 			res.status(500).send({
-				message: err.message || "Some error ocuured while removing the user"
+				message: err.message || "Error : User.remove"
 			});
 		}
-		else res.send("remove a user");
+		else res.send("Success : User.remove");
 	});
 };

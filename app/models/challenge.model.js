@@ -16,36 +16,31 @@ Challenge.create = async ({newChallenge, newGoingOn, friendIDs}, result) => {
 		const conn = await sql.getConnection(async conn => conn);
 
 		try {
-			// 트랜잭션 시작
 			await conn.beginTransaction();
 
-			// 챌린지 추가
 			let res = await conn.query("insert into challenges SET ?", newChallenge);
 
-			// 생성된 챌린지의 ID값 저장
 			let cID = res[0].insertId;
 
-			// 진행 중인 챌린지 목록에 추가
-			await conn.query("insert into goingon SET ?", {uID: newGoingOn.uID, cID: 29});
+			await conn.query("insert into goingon SET ?", {uID: newGoingOn.uID, cID: cID});
 
-			// 친구 초대
 			for(i = 0; i < friendIDs.length; i++) {
 				await conn.query("insert into invited SET ?", {uID: friendIDs[i], cID: cID});
 			}
 
 			await conn.commit();
-			result(null);
+			result(null, {cID : cID});
 		}
 		catch(err) {
 			await conn.rollback();
-			result(err);			
+			result(err, null);			
 		}
 		finally {
 			conn.release();
 		}
 	}
 	catch(err) {
-		result(err);
+		result(err, null);
 	}
 };
 
@@ -55,19 +50,15 @@ Challenge.accept = async ({uID, cID}, result) => {
 		const conn = await sql.getConnection(async conn => conn);
 
 		try {
-			// 트랜잭션 시작
 			await conn.beginTransaction();
 
-			// invited에서 제거
 			let res = await conn.query("delete from invited where uID = ? and cID = ?", [uID, cID]);
 			if(res[0].affectedRows == 0) {
 				throw new Error("No AffectedRows");				
 			}
 
-			// goingon에 추가
 			await conn.query("insert into goingon SET ?", {uID: uID, cID: cID});
 
-			// 커밋
 			await conn.commit();
 			result(null);
 		}
