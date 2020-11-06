@@ -1,35 +1,26 @@
 const sql = require("./db.js").pool
 
-// 생성자
-const ExerciseRecord = function(exerciseRecord) {
-	this.uID = exerciseRecord.uID;
-	this.time = exerciseRecord.time;
-};
-
-ExerciseRecord.create = (newEr, result) => {
+// 운동 기록 추가
+exports.create = (newEr, result) => {
 	sql.getConnection((err, conn) => {
 		if(err) console.log(err);
 
 		else {
-			console.log(newEr);
-			console.log(newEr.uID);
-			console.log(newEr.time);
-			console.log({newEr:uID, newEr:time});
-
 			conn.query("insert into exercise_records SET ?", newEr, (err, res) => {
 				conn.release();
 
 				if(err) {
 					console.log(err);
-					result(err, null);
+					result(err);
 				}
 
-				else result(null, {erID: res.insertId});
+				else result(null);
 			});
 		}
 	});
 };
 
+/*
 ExerciseRecord.remove = (erID, result) => {
 	sql.getConnection((err, conn) => {
 		if(err) console.log(err);
@@ -52,5 +43,4 @@ ExerciseRecord.remove = (erID, result) => {
 		}
 	});
 };
-
-module.exports = ExerciseRecord;
+*/

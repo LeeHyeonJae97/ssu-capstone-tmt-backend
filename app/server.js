@@ -1,18 +1,19 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
 const app = express();
-
-const user_router = express.Router();
 
 app.use(bodyParser.json());
 
-// 라우팅
+// 로그인
+const login_router = express.Router();
+require("./routes/login.routes.js")(login_router);
+app.use("/login", login_router);
+
+// 유저 정보
+const user_router = express.Router();
 require("./routes/user.routes.js")(user_router);
+app.use("/user", user_router);
 
-app.use("/users", user_router);
-
-// 루트 페이지 접속
 app.get('/', (req, res) => {
 	res.json({ message: 'welcome' });
 });

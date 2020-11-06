@@ -2,7 +2,7 @@ module.exports = {
 	host: "localhost",
 	user: "root",
 	password: "ssu",
-	db: "tmt",
+	db: "helpmeht",
 	waitForConnections: true,
 	connectionLimit: 50
 };

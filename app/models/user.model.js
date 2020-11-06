@@ -1,36 +1,14 @@
 const sql = require("./db.js").pool;
+const sql2 = require("./db.js").pool2;
 
 // constructor
 const User = function(user) {
 	this.name = user.name;
-	//this.email = user.email;
-	//this.phone_number = user.phone_number;
-	//this.age = user.age;
-	//this.height = user.height;
-	//this.weight = user.weight;
-};
-
-User.findById = (uID, result) => {
-	sql.getConnection((err, conn) => {
-		if(err) console.log(err);
-		
-		else {
-			conn.query("select * from users where uID = ?", uID, (err, res) => {	
-				conn.release();
-
-				if(err) {
-					console.log(err);
-					result(err, null);
-				}
-
-				else {
-					if(res.length) result(null, res[0]);
-
-					else result(new Error("No AffectedRows"), null);
-				}
-			});
-		}
-	});
+	this.email = user.email;
+	this.phone_number = user.phone_number;
+	this.age = user.age;
+	this.height = user.height;
+	this.weight = user.weight;
 };
 
 User.findByName = (uName, result) => {
@@ -56,43 +34,51 @@ User.findByName = (uName, result) => {
 	});
 };
 
-User.create = (newUser, result) => {
-	sql.getConnection((err, conn) => {
-		if(err) console.log(err);
+User.create = async (newUser, id, pw, result) => {
+	try {		
+		const conn = await sql2.getConnection(async conn => conn);
 
-		else {
-			conn.query("insert into users SET ?", newUser, (err, res) => {
-				conn.release();	
+		try {
+			await conn.beginTransaction();
 
-				if(err) {
-					console.log(err);
-					result(err, null);
-				}
-				
-				else result(null, {uID: res.insertId});
-			});
+			let res = await conn.query("insert into users SET ?", newUser);
+			let uID = res[0].insertId;
+
+			await conn.query("insert into login SET ?", {id: id, pw: pw, uID: uID});
+
+			await conn.query("insert into alarms SET ?", {uID: uID});
+
+			await conn.commit();
+			result(null, {uID: uID});
 		}
-	});
-};
+		catch(err) {
+			await conn.rollback();
+			result(err, null);
+		}
+		finally {
+			conn.release();
+		}
+	}
+	catch(err) {
+		result(err, null);
+	}
+}
 
-User.update = (uID, result) => {
+User.update = (uID, updated, result) => {
 	sql.getConnection((err, conn) => {
 		if(err) console.log(err);
 
 		else {
-			conn.query("유저 정보 업데이트", (err, res) => {
+			conn.query("UPDATE users SET ? where uID = ?", [updated, uID], (err, res) => {
 				conn.release()
 
 				if(err) {
 					console.log(err);
 					result(err);
 				}
-
-				else {
-					if(res.affectedRows > 0) result(null)					
+				else if(res.affectedRows > 0) result(null)					
 					
-					else result(new Error("No AffectedRows"));				
-				}
+				else result(new Error("No AffectedRows"));								
 			});
 		}
 	});

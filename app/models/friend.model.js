@@ -23,12 +23,12 @@ exports.add = (newFriend, result) => {
 	});
 };
 
-exports.remove = (byeFriend, result) => {
+exports.remove = (uID, friend_uID, result) => {
 	sql.getConnection((err, conn) => {
 		if(err) console.log(err);
 
 		else {
-			conn.query("delete from friends where uID = ? and friendID = ?", [byeFriend.uID, byeFriend.friendID], (err, res) => {
+			conn.query("delete from friends where uID = ? and friend_uID = ?", uID, friend_uID, (err, res) => {
 				conn.release();
 
 				if(err) {

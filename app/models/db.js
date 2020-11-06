@@ -1,6 +1,6 @@
 const dbConfig = require('../config/db.config.js');
 
-// Create a connection pool to the database
+// 老馆 DB 目池记 钱
 const pool = require('mysql2').createPool({
 	host: dbConfig.host,
 	user: dbConfig.user,
@@ -10,6 +10,7 @@ const pool = require('mysql2').createPool({
 	connectionLimit : dbConfig.connectionLimit
 });
 
+// 飘罚黎记侩 DB 目池记 钱
 const pool2 = require('mysql2/promise').createPool({
 	host: dbConfig.host,
 	user: dbConfig.user,

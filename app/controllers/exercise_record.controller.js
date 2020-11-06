@@ -8,21 +8,17 @@ exports.create = (req, res) => {
 		});
 	}
 
-	const exerciseRecord = new ExerciseRecord({
-		uID: req.params.uID,
-		time: req.body.time
-	});
-
-	ExerciseRecord.create(exerciseRecord, (err, data) => {
+	ExerciseRecord.create(req.body, (err) => {
 		if(err) {
 			res.status(500).send({
 				message: err.message || "Error : ExerciseRecord.create"
 			});			
 		}
-		else res.send({message: "Success : ExerciseRecord.create", erID: data.erID});
+		else res.send({message: "Success : ExerciseRecord.create"});
 	});
 };
 
+/*
 // 유저의 운동 기록 제거
 exports.remove = (req, res) => {
 	ExerciseRecord.remove(req.params.erID, (err, data) => {
@@ -34,3 +30,4 @@ exports.remove = (req, res) => {
 		else res.send("Success : ExerciseRecord.remove");
 	});
 };
+*/
