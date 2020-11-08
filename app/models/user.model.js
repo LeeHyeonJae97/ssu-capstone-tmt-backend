@@ -1,17 +1,6 @@
 const sql = require("./db.js").pool;
-const sql2 = require("./db.js").pool2;
 
-// constructor
-const User = function(user) {
-	this.name = user.name;
-	this.email = user.email;
-	this.phone_number = user.phone_number;
-	this.age = user.age;
-	this.height = user.height;
-	this.weight = user.weight;
-};
-
-User.findByName = (uName, result) => {
+exports.findByName = (uName, result) => {
 	sql.getConnection((err, conn) => {
 		if(err) console.log(err);
 
@@ -34,37 +23,7 @@ User.findByName = (uName, result) => {
 	});
 };
 
-User.create = async (newUser, id, pw, result) => {
-	try {		
-		const conn = await sql2.getConnection(async conn => conn);
-
-		try {
-			await conn.beginTransaction();
-
-			let res = await conn.query("insert into users SET ?", newUser);
-			let uID = res[0].insertId;
-
-			await conn.query("insert into login SET ?", {id: id, pw: pw, uID: uID});
-
-			await conn.query("insert into alarms SET ?", {uID: uID});
-
-			await conn.commit();
-			result(null, {uID: uID});
-		}
-		catch(err) {
-			await conn.rollback();
-			result(err, null);
-		}
-		finally {
-			conn.release();
-		}
-	}
-	catch(err) {
-		result(err, null);
-	}
-}
-
-User.update = (uID, updated, result) => {
+exports.update = (uID, updated, result) => {
 	sql.getConnection((err, conn) => {
 		if(err) console.log(err);
 
@@ -84,7 +43,7 @@ User.update = (uID, updated, result) => {
 	});
 };
 
-User.remove = (uID, result) => {
+exports.remove = (uID, result) => {
 	sql.getConnection((err, conn) => {
 		if(err) console.log(err);
 
@@ -106,5 +65,3 @@ User.remove = (uID, result) => {
 		}
 	});
 };
-
-module.exports = User;

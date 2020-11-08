@@ -7,8 +7,6 @@ module.exports = router => {
 
 	router.get("/find/:uName", users.findByName); // 유저 검색
 	
-	router.post("/", users.create); // 새로운 유저 정보 추가
-	
 	router.put("/:uID", users.update); // 유저의 정보 업데이트
 	
 	router.delete("/:uID", users.remove); // 유저 삭제
