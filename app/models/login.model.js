@@ -87,12 +87,13 @@ exports.getInfo = async (uID, result) => {
 };
 
 passport.serializeUser((user, done) => {
-    console.log('passport session save: ', user.id)
+    console.log("passport session save: ", user.id)
     done(null, user.id);
 });
 
  passport.deserializeUser((id, done) => {
-    console.log('passport session get id: ', id);
+	console.log("asdjkl");
+    console.log("passport session get id: ", id);
     done(null,id);
 });
 

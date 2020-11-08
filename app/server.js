@@ -1,8 +1,24 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const passport = require('passport');
+const session = require('express-session');
+
 const app = express();
 
-app.use(bodyParser.json());
+app.use(bodyParser.json());	
+app.use(
+	session({
+		resave: false,
+		saveUninitialized: false,
+		secret: "pyh",
+		cookie: {
+			httpOnly: true,
+			secure: false
+		}
+	})
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 // ·Î±×ÀÎ
 const login_router = express.Router();

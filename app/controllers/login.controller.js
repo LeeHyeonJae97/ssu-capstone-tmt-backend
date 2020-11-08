@@ -16,7 +16,7 @@ exports.login = (req, res, next) => {
 						message: err.message || "Error : Login.getInfo"
 					});
 				}
-			
+				
 				else res.send({message: "Success : Login.getInfo", data});
 			});
 		}
