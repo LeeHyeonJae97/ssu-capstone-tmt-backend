@@ -1,5 +1,6 @@
 const sql = require("./db.js").pool;
 
+// 유저 검색
 exports.findByName = (uName, result) => {
 	sql.getConnection((err, conn) => {
 		if(err) console.log(err);
@@ -23,6 +24,7 @@ exports.findByName = (uName, result) => {
 	});
 };
 
+// 유저 정보 업데이트
 exports.update = (uID, updated, result) => {
 	sql.getConnection((err, conn) => {
 		if(err) console.log(err);
@@ -43,6 +45,7 @@ exports.update = (uID, updated, result) => {
 	});
 };
 
+// 유저 삭제
 exports.remove = (uID, result) => {
 	sql.getConnection((err, conn) => {
 		if(err) console.log(err);

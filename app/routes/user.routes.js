@@ -24,10 +24,16 @@ module.exports = router => {
 	router.put("/challenge/fail/:uID/:cID", challenge.fail); // 챌린지 실패 또는 중도 포기
 
 	router.delete("/challenge/:uID/:cID", challenge.remove); // 실패 또는 중도 포기한 챌린지 삭제
-	
-	router.post("/friend/:uID/:friend_uID", friend.add); // 친구 추가	 
+
+	router.get("/friend/:uID", friend.find); // 친구 목록 갱신
 	
 	router.delete("/friend/:uID/:friend_uID", friend.remove); // 친구 제거
+	
+	router.post("/friend/request/:uID/:friend_uID", friend.request); // 친구 추가 요청	 
+
+	router.put("/friend/request/:uID/:friend_uID", friend.accept); // 친구 요청 수락
+
+	router.delete("/friend/request/:uID/:friend_uID", friend.decline) // 친구 요청 거절
 
 	router.put("/alarm/:uID", alarm.update); // 알람 수정
 
