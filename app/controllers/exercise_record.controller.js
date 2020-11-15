@@ -4,17 +4,22 @@ const ExerciseRecord = require("../models/exercise_record.model.js");
 exports.create = (req, res) => {
 	if(!req.body) {
 		res.status(400).send({
-			message: "Error : ExerciseRecord.create / Content can not be empty"
+			message: "Error : ExerciseRecord.create / Content can not be empty",
+			state: 0
 		});
 	}
 
 	ExerciseRecord.create(req.body, (err) => {
 		if(err) {
 			res.status(500).send({
-				message: err.message || "Error : ExerciseRecord.create"
+				message: err.message || "Error : ExerciseRecord.create",
+				state: 0
 			});			
 		}
-		else res.send({message: "Success : ExerciseRecord.create"});
+		else res.send({
+			message: "Success : ExerciseRecord.create",
+			state: 1
+		});
 	});
 };
 

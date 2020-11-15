@@ -4,16 +4,22 @@ const Login = require("../models/login.model.js");
 exports.login = (req, res, next) => {
 	if(!req.body) {
 		res.status(400).send({
-			message: "Error : Login.Login / Content can not be empty"
+			message: "Error : Login.Login / Content can not be empty",
+			state: 0
 		});
 	}
 
 	Login.login(req, res, next, (err, data) => {
 		if(err) {
 			res.status(500).send({
-				message: err.message || "Error : Login.login"
+				message: err.message || "Error : Login.login",
+				state: 0
 			});
 		}
-		else res.send({message: "Success : Login.login", data: data});			
+		else res.send({
+			message: "Success : Login.login",
+			data: data,
+			state: 1
+		});			
 	});
 };
