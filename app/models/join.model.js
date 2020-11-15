@@ -20,7 +20,7 @@ exports.doublecheck = async (id, result) => {
 		const conn = await sql.getConnection(async conn => conn);
 
 		try {
-			let res = await conn.query("select id from login where id = ?", id);
+			let res = await conn.query("select id from users where id = ?", id);
 			if(res[0].length) throw new Error("id is double");
 
 			else result(null);
