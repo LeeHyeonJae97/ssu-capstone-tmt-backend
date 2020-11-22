@@ -3,6 +3,10 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 //const sens = require('node-sens');
 
+//**
+const sql = require('./models/db.js').pool
+//**
+
 const app = express();
 
 app.use(bodyParser.json());	
@@ -47,7 +51,25 @@ app.get('/', async (req, res) => {
 */
 //**
 
-app.get('/', async (req, res) => {
+app.get('/test', (req, res) => {
+	sql.getConnection((err, conn) => {
+		if(err) console.log(err);
+
+		else {
+			conn.query("select name from exercises", (err, rows) => {
+				conn.release();
+
+				if(err) {
+					console.log(err);
+					res.send(err);
+				}
+				else res.send(rows);
+			});
+		}
+	});
+})
+
+app.get('/', (req, res) => {
 	res.send({
 		message: 'welcome'
 	});

@@ -9,6 +9,13 @@ exports.update = (req, res) => {
 		});
 	}
 
+	else if(!req.body.hasOwnProperty("alarm")) {
+		res.status(400).send({
+			message: "Error : Alarm.update / Content omitted some value",
+			state: 0
+		})
+	}
+
 	else {
 		Alarm.update(req.params.uID, req.body.alarm, (err) => {
 			if(err) {

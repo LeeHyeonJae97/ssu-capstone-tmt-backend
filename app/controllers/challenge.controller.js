@@ -8,6 +8,13 @@ exports.create = (req, res) => {
 			state: 0
 		});
 	}
+
+	else if(!req.body.hasOwnProperty("newChallenge") || !req.body.hasOwnProperty("routines")) {
+		res.status(400).send({
+			message: "Error : Challenge.create / Content omitted some value",
+			state: 0
+		})
+	}
 	
 	else {
 		Challenge.create({uID: req.params.uID, newChallenge: req.body.newChallenge, routines: req.body.routines, friend_uIDs: req.body.friend_uIDs}, (err, data) => {

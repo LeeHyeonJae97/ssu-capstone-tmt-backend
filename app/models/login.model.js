@@ -100,7 +100,7 @@ passport.use('local-login', new localStrategy(
 					let uID = rows[0].uID;
 
 					// 유저 정보				
-					let [rows_users, fields_users] = await conn.query("select uID, name, email, phone_number, age, height, weight, public from users where uID = ?", uID);
+					let [rows_users, fields_users] = await conn.query("select uID, name, email, phone_number, birth_date, height, weight, profile_image, public from users where uID = ?", uID);
 					if(!rows_users.length) throw new Error("No AffectedRows");
 
 					// 운동기록

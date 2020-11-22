@@ -16,11 +16,15 @@ exports.join = (req, res, next) => {
 				state: 0
 			});
 		}
-		else res.send({
-			message: "Success : Join.join",
-			uID: data.uID,
-			state: 1
-		});
+		else  {
+			console.log(data);
+			console.log(data.uID);
+			res.send({
+				message: "Success : Join.join",
+				uID: data.uID,
+				state: 1
+			});
+		}
 	})			
 };
 

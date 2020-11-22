@@ -2,7 +2,7 @@ const sql = require("./db.js").pool2
 
 // 생성
 // challenges와 routines에 추가하고 goingon과 invited에 초대한 친구 추가
-exports.create = async ({uID, newChallenge, routines, friend_uIDs}, result) => {	
+exports.create = async ({uID, newChallenge, routines, friend_uIDs}, result) => {
 	try {
 		const conn = await sql.getConnection(async conn => conn);
 
