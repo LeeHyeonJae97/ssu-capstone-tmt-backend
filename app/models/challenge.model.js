@@ -2,25 +2,28 @@ const sql = require("./db.js").pool2
 
 // 생성
 // challenges와 routines에 추가하고 goingon과 invited에 초대한 친구 추가
-exports.create = async ({uID, newChallenge, routines, friend_uIDs}, result) => {
+exports.create = async (uID, data, result) => {
 	try {
 		const conn = await sql.getConnection(async conn => conn);
 
 		try {
 			await conn.beginTransaction();
 
-			let res = await conn.query("insert into challenges SET ?", newChallenge);
+			let res = await conn.query("insert into challenges SET ?", {name: data.name, description: data.description, calorie_consume: data.calorie_consume,
+				start_datetime: data.start_datetime, finish_datetime: data.finish_datetime, perform_day: data.perform_day});
 
 			let cID = res[0].insertId;
 
-			for(i = 0; i < routines.length; i++) {
-				await conn.query("insert into routines SET ?", {cID: cID, eID: routines[i].eID, target_total_count: routines[i].target_total_count});
+			for(i = 0; i < data.eID.length; i++) {
+				await conn.query("insert into routines SET ?", {cID: cID, eID: data.eID[i], target_total_count: data.target_total_count[i]});
 			}
 
 			await conn.query("insert into goingon SET ?", {uID: uID, cID: cID});
 
-			for(i = 0; i < friend_uIDs.length; i++) {
-				await conn.query("insert into invited SET ?", {uID: friend_uIDs[i], cID: cID});
+			if(data.hasOwnProperty("friend_uIDs")) {
+				for(i = 0; i < data.friend_uIDs.length; i++) {
+					await conn.query("insert into invited SET ?", {uID: data.friend_uIDs[i], cID: cID});
+				}
 			}
 
 			await conn.commit();

@@ -4,12 +4,16 @@ module.exports = router => {
 	const challenge = require("../controllers/challenge.controller.js");
 	const friend = require("../controllers/friend.controller.js");
 	const alarm = require("../controllers/alarm.controller.js");
-
-	router.get("/find/:uName", users.findByName); // 유저 검색
+	
+	router.get("/:uID", users.findById); // 유저 검색 (ID)
 	
 	router.put("/:uID", users.update); // 유저의 정보 업데이트
 	
 	router.delete("/:uID", users.remove); // 유저 삭제
+
+	router.get("/find/:uName", users.findByName); // 유저 검색 (이름)
+
+	router.get("/exercise_record/:uID", exerciseRecords.findById); // 유저의 운동 기록 조회
 		
 	router.post("/exercise_record", exerciseRecords.create); // 유저의 운동 기록 추가
 	

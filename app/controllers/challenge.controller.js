@@ -3,32 +3,24 @@ const Challenge = require("../models/challenge.model.js");
 // 새로운 챌린지 추가
 exports.create = (req, res) => {
 	if(!req.body) {
+		console.log("body is empty");
 		res.status(400).send({
-			message: "Error : Challenge.create / Content can not be empty",
-			state: 0
+			message: "Error : Challenge.create / Content can not be empty"
 		});
-	}
-
-	else if(!req.body.hasOwnProperty("newChallenge") || !req.body.hasOwnProperty("routines")) {
-		res.status(400).send({
-			message: "Error : Challenge.create / Content omitted some value",
-			state: 0
-		})
 	}
 	
 	else {
-		Challenge.create({uID: req.params.uID, newChallenge: req.body.newChallenge, routines: req.body.routines, friend_uIDs: req.body.friend_uIDs}, (err, data) => {
+		Challenge.create(req.params.uID, req.body, (err, data) => {
 			if(err) {
+				console.log(err);
 				res.status(500).send({
-					message: err.message || "Error : Challenge.create",
-					state: 0
+					message: err.message || "Error : Challenge.create"
 				});
 			}
 
 			else res.send({
 				message: "Success : Challenge.create",
-				cID: data.cID,
-				state: 1
+				cID: data.cID
 			});
 		});
 	}
@@ -38,15 +30,14 @@ exports.create = (req, res) => {
 exports.accept = (req, res) => {
 	Challenge.accept(req.params.uID, req.params.cID, (err) => {
 		if(err) {
+			console.log(err);
 			res.status(500).send({
-				message: err.message || "Error : Challenge.accept",
-				state: 0
+				message: err.message || "Error : Challenge.accept"
 			});
 		}
 
 		else res.send({
-			message: "Success : Challenge.accept",
-			state: 1
+			message: "Success : Challenge.accept"
 		});
 	});
 };
@@ -55,15 +46,14 @@ exports.accept = (req, res) => {
 exports.decline = (req, res) => {
 	Challenge.decline(req.params.uID, req.params.cID, (err) => {
 		if(err) {
+			console.log(err);
 			res.status(500).send({
-				message: err.message || "Error : Challenge.decline",
-				state: 0
+				message: err.message || "Error : Challenge.decline"
 			});
 		}
 
 		else res.send({
-			message: "Success : Challenge.decline",
-			state: 1
+			message: "Success : Challenge.decline"
 		});
 	});
 };
@@ -72,15 +62,14 @@ exports.decline = (req, res) => {
 exports.success = (req, res) => {
 	Challenge.success(req.params.uID, req.params.cID, (err) => {
 		if(err) {
+			console.log(err);
 			res.status(500).send({
-				message: err.message || "Error : Challenge.success",
-				state: 0
+				message: err.message || "Error : Challenge.success"
 			});
 		}
 
 		else res.send({
-			message: "Success : Challenge.success",
-			state: 1
+			message: "Success : Challenge.success"
 		});
 	});
 };
@@ -89,15 +78,14 @@ exports.success = (req, res) => {
 exports.fail = (req, res) => {
 	Challenge.fail(req.params.uID, req.params.cID, (err) => {
 		if(err) {
+			console.log(err);
 			res.status(500).send({
-				message: err.message || "Error : Challenge.fail",
-				state: 0
+				message: err.message || "Error : Challenge.fail"
 			});
 		}
 
 		else res.send({
-			message: "Success : Challenge.fail",
-			state: 1
+			message: "Success : Challenge.fail"
 		});
 	});
 };
@@ -106,15 +94,14 @@ exports.fail = (req, res) => {
 exports.remove = (req, res) => {
 	Challenge.remove(req.params.uID, req.params.cID, (err) => {
 		if(err) {
+			console.log(err);
 			res.status(500).send({
-				message: err.message || "Error : Challenge.remove",
-				state: 0
+				message: err.message || "Error : Challenge.remove"
 			});
 		}
 
 		else res.send({
-			message: "Success : Challenge.remove",
-			state: 1
+			message: "Success : Challenge.remove"
 		});
 	})
 };

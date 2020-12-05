@@ -1,11 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
-//const sens = require('node-sens');
-
-//**
-const sql = require('./models/db.js').pool
-//**
 
 const app = express();
 
@@ -27,48 +22,6 @@ const user_router = express.Router();
 require("./routes/user.routes.js")(user_router);
 app.use("/user", user_router);
 
-//**
-// 인증번호는 Math.random()사용해서 그냥 무작위로 생성
-// 라우팅 해서 인증번호 요청하는 걸 만들고 client에 무작위로 생성된 인증번호 넘겨준다.
-// 유저가 앱에 제대로 입력했는지 넘겨받은 인증번호와 비교
-/*
-const ncp = new sens.NCPClient({
-	phoneNumber: '01046762951',
-	serviceId: 'ncp:sms:kr:261568520921:leehyeonjae',
-	secretKey: 'HFMPlyxQry4K4huaeDpxP5qHRxrq3sDem4qaxdgt',
-	accessKey: 'WdgolbzatS4hPPdg5Jgd'
-});
-
-app.get('/', async (req, res) => {
-	const authRes = await ncp.sendSMS({
-		to: '01046762951',
-		content: 'hihi'
-	});
-	
-	res.send(authRes);
-	console.log(authRes);
-});
-*/
-//**
-
-app.get('/test', (req, res) => {
-	sql.getConnection((err, conn) => {
-		if(err) console.log(err);
-
-		else {
-			conn.query("select name from exercises", (err, rows) => {
-				conn.release();
-
-				if(err) {
-					console.log(err);
-					res.send(err);
-				}
-				else res.send(rows);
-			});
-		}
-	});
-})
-
 app.get('/', (req, res) => {
 	res.send({
 		message: 'welcome'
@@ -76,5 +29,6 @@ app.get('/', (req, res) => {
 })
 
 app.listen(3000, () => {
-	console.log('server is running on port 3000');
+	console.log('server is running on port 3000');	
+	console.log();
 });

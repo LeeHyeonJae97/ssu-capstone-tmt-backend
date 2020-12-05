@@ -1,6 +1,7 @@
 const passport = require('passport')
 const localStrategy = require('passport-local').Strategy;
 const sql = require("./db.js").pool2;
+const sens = require('node-sens');
 
 // 새로운 유저 추가
 exports.join = (req, res, next, result) => {
@@ -76,3 +77,43 @@ exports.doublecheck = async (id, result) => {
 		result(err);
 	}
 };
+
+// 휴대폰 인증
+const ncp = new sens.NCPClient({
+	phoneNumber: '01046762951',
+	serviceId: 'ncp:sms:kr:261568520921:leehyeonjae',
+	secretKey: 'HFMPlyxQry4K4huaeDpxP5qHRxrq3sDem4qaxdgt',
+	accessKey: 'WdgolbzatS4hPPdg5Jgd'
+});
+const auths = new Array();
+
+exports.auth = async (phone_number, result) => {
+	const content = Math.floor(Math.random() * (9999 - 1000) + 1000).toString();	
+	const authRes = await ncp.sendSMS({
+		to: phone_number.toString(),
+		content: 'AUTH : ' + content
+	});	
+
+	auths.push({
+		phone_number: phone_number,
+		content: content
+	});
+
+	console.log(auths);
+
+	result(null);
+}
+
+exports.authCheck = (phone_number, content, result) => {
+	for(i = 0; i < auths.length; i++) {
+		if(auths[i].phone_number === phone_number && auths[i].content === content.toString()) {
+			auths.splice(i, 1);
+			console.log(auths);
+			result(null);
+			return;
+		}
+	}
+	console.log(auths);
+
+	result(new Error('Wrong auth check'))
+}

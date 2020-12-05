@@ -68,7 +68,15 @@ exports.getInfo = async (uID, result) => {
 				}
 			}
 
-			result(null, {users: rows_users, exercise: rows_exercise_records, goingon: rows_goingon, success: rows_success, failed: rows_failed, invited: rows_invited, friends: rows_friends});			
+			// 친구 요청 정보
+			let [rows_friend_request, fields_friend_request] = await conn.quest("select uID from request where friend_uID = ?", uID);
+			if(rows_friend_request.length) {
+				for(i = 0; i < rows_friend_request; i++) {
+					[rows_friend_request[i], fields_friend_request[i]] = await conn.query("select * from users where uID = ?", rows_friend_request[i].uID);
+				}
+			}
+
+			result(null, {users: rows_users, exercise: rows_exercise_records, goingon: rows_goingon, success: rows_success, failed: rows_failed, invited: rows_invited, friends: rows_friends, request: rows_friend_request});
 		}
 		catch(err) {
 			result(err, null);
@@ -171,9 +179,33 @@ passport.use('local-login', new localStrategy(
 
 					// 받은 친구 요청 정보
 					let [rows_requested, fields_requested] = await conn.query("select uID from request where friend_uID = ?", uID);
+					if(rows_requested.length) {
+						for(i = 0; i < rows_requested.length; i++) {
+							let [rows_friendPublic, fields_friendPublic] = await conn.query("select public from users where uID = ?", rows_requested[i].friend_uID);
+
+							if(rows_friendPublic[0].public) {							
+								let [rows_friendInfo, fields_friendInfo] = await conn.query("select * from users where uID = ?", rows_requested[i].friend_uID);
+								rows_requested[i] = rows_friendInfo[0];
+							}
+							else
+								rows_requested[i] = {uID: rows_requested[i].friend_uID};
+						}
+					}
 					
 					// 보낸 친구 요청 정보
 					let [rows_request, fields_request] = await conn.query("select friend_uID from request where uID = ?", uID);
+					if(rows_request.length) {
+						for(i = 0; i < rows_request.length; i++) {
+							let [rows_friendPublic, fields_friendPublic] = await conn.query("select public from users where uID = ?", rows_request[i].friend_uID);
+
+							if(rows_friendPublic[0].public) {							
+								let [rows_friendInfo, fields_friendInfo] = await conn.query("select * from users where uID = ?", rows_request[i].friend_uID);
+								rows_request[i] = rows_friendInfo[0];
+							}
+							else
+								rows_request[i] = {uID: rows_request[i].friend_uID};
+						}
+					}
 
 					// 알람 정보
 					let [rows_alarm, fields_alarm] = await conn.query("select time, active from alarms where uID = ?", uID);

@@ -36,16 +36,14 @@ exports.find = async (uID, result) => {
 // 친구 삭제
 exports.remove = (uID, friend_uID, result) => {
 	sql.getConnection((err, conn) => {
-		if(err) console.log(err);
+		if(err) result(err);
 
 		else {
 			conn.query("delete from friends where uID = ? and friend_uID = ?", uID, friend_uID, (err, res) => {
 				conn.release();
 
-				if(err) {
-					console.log(err);
-					result(err);
-				}
+				if(err) result(err);
+				
 				else {
 					if(res.affectedRows > 0) result(null);
 
@@ -125,10 +123,8 @@ exports.decline = (uID, friend_uID, result) => {
 			conn.query("delete from request where uID = ? and friend_uID = ?", [friend_uID, uID], (err, res) => {
 				conn.release();
 
-				if(err) {
-					console.log(err);
-					result(err);
-				}
+				if(err) result(err);
+				
 				else {
 					if(res.affectedRows > 0) result(null);
 

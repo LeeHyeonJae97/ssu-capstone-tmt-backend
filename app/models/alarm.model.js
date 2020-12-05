@@ -9,10 +9,8 @@ exports.update = (uID, alarm, result) => {
 			conn.query("update alarms SET ? where uID = ?", [alarm, uID], (err, res) => {
 				conn.release();
 
-				if(err) {
-					console.log(err);
-					result(err);
-				}
+				if(err) result(err);
+			
 				else if(res.affectedRows > 0) result(null)
 
 				else result(new Error("No AffectedRows"));
