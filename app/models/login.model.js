@@ -181,14 +181,14 @@ passport.use('local-login', new localStrategy(
 					let [rows_requested, fields_requested] = await conn.query("select uID from request where friend_uID = ?", uID);
 					if(rows_requested.length) {
 						for(i = 0; i < rows_requested.length; i++) {
-							let [rows_friendPublic, fields_friendPublic] = await conn.query("select public from users where uID = ?", rows_requested[i].friend_uID);
+							let [rows_friendPublic, fields_friendPublic] = await conn.query("select public from users where uID = ?", rows_requested[i].uID);
 
 							if(rows_friendPublic[0].public) {							
-								let [rows_friendInfo, fields_friendInfo] = await conn.query("select * from users where uID = ?", rows_requested[i].friend_uID);
+								let [rows_friendInfo, fields_friendInfo] = await conn.query("select * from users where uID = ?", rows_requested[i].uID);
 								rows_requested[i] = rows_friendInfo[0];
 							}
 							else
-								rows_requested[i] = {uID: rows_requested[i].friend_uID};
+								rows_requested[i] = {uID: rows_requested[i].uID};
 						}
 					}
 					

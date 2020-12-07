@@ -1,7 +1,7 @@
 const sql = require("./db.js").pool
 
-exports.findById = (uId, result) => {
-	sq.getConnection((err, conn) => {
+exports.findById = (uID, result) => {
+	sql.getConnection((err, conn) => {
 		if(err) result(err, null);
 		
 		else {
