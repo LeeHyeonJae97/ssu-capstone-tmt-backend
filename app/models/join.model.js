@@ -93,15 +93,20 @@ exports.auth = async (phone_number, result) => {
 		to: phone_number.toString(),
 		content: 'AUTH : ' + content
 	});	
+	
+	console.log(authRes);
 
-	auths.push({
-		phone_number: phone_number,
-		content: content
-	});
+	if(authRes.success) {
+		auths.push({
+			phone_number: phone_number,
+			content: content
+		});
 
-	console.log(auths);
+		console.log(auths);
 
-	result(null);
+		result(null);
+	}
+	else result(new Error(authRes.msg));
 }
 
 exports.authCheck = (phone_number, content, result) => {
@@ -113,7 +118,6 @@ exports.authCheck = (phone_number, content, result) => {
 			return;
 		}
 	}
-	console.log(auths);
 
 	result(new Error('Wrong auth check'))
 }

@@ -36,17 +36,3 @@ exports.create = (req, res) => {
 		});
 	});
 };
-
-/*
-// 유저의 운동 기록 제거
-exports.remove = (req, res) => {
-	ExerciseRecord.remove(req.params.erID, (err, data) => {
-		if(err) {
-			res.status(500).send({
-				message: err.message || "Error : ExerciseRecord.remove"
-			});
-		}
-		else res.send("Success : ExerciseRecord.remove");
-	});
-};
-*/

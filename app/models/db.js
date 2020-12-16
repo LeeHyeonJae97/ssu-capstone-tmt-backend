@@ -21,6 +21,6 @@ const pool2 = require('mysql2/promise').createPool({
 });
 
 module.exports = {
-pool: pool,
-pool2: pool2
+	pool: pool,
+	pool2: pool2
 }

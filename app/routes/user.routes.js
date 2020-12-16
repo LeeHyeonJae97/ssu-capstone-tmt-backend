@@ -40,18 +40,4 @@ module.exports = router => {
 	router.delete("/friend/request/:uID/:friend_uID", friend.decline) // 친구 요청 거절
 
 	router.put("/alarm/:uID", alarm.update); // 알람 수정
-
-	
-
-
-
-
-
-
-
-
-
-	// 유저의 챌린지 수행 기록 삭제
-	// 유저의 운동 기록 삭제
-	//router.delete("/exercise_reccord/:uID", exerciseRecords.remove);
 }
